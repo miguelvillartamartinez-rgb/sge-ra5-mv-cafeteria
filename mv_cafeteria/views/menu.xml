@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="mv_cafeteria_menu_root" name="Cafetería"/>
+
+    <menuitem
+        id="mv_cafeteria_menu_productos"
+        name="Productos"
+        parent="mv_cafeteria_menu_root"
+        action="mv_cafeteria_producto_action"
+    />
+
+    <menuitem
+        id="mv_cafeteria_menu_mesas"
+        name="Mesas"
+        parent="mv_cafeteria_menu_root"
+        action="mv_cafeteria_mesa_action"
+    />
+    <menuitem
+    id="mv_cafeteria_menu_alergenos"
+    name="Alérgenos"
+    parent="mv_cafeteria_menu_root"
+    action="mv_cafeteria_alergeno_action"
+/>
+    <menuitem
+        id="mv_cafeteria_menu_pedidos"
+        name="Pedidos"
+        parent="mv_cafeteria_menu_root"
+        action="mv_cafeteria_pedido_action"
+    />
+
+
+</odoo>

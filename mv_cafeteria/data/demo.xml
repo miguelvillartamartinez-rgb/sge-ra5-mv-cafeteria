@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- ===================== -->
+    <!-- ALÉRGENOS (cafe.alergeno) -->
+    <!-- ===================== -->
+    <record id="alergeno_gluten" model="cafe.alergeno">
+        <field name="name">Gluten</field>
+        <field name="codigo">GLU</field>
+        <field name="descripcion">Presente en cereales como trigo, cebada y centeno.</field>
+    </record>
+
+    <record id="alergeno_lactosa" model="cafe.alergeno">
+        <field name="name">Lactosa</field>
+        <field name="codigo">LAC</field>
+        <field name="descripcion">Azúcar natural presente en la leche.</field>
+    </record>
+
+    <record id="alergeno_frutos_secos" model="cafe.alergeno">
+        <field name="name">Frutos secos</field>
+        <field name="codigo">FRU</field>
+        <field name="descripcion">Puede incluir almendras, avellanas, nueces, etc.</field>
+    </record>
+
+    <!-- ===================== -->
+    <!-- MESAS (cafe.mesa) -->
+    <!-- ===================== -->
+    <record id="mesa_m1" model="cafe.mesa">
+        <field name="name">M1</field>
+        <field name="ubicacion">interior</field>
+        <field name="capacidad">2</field>
+        <field name="activa">True</field>
+    </record>
+
+    <record id="mesa_t1" model="cafe.mesa">
+        <field name="name">T1</field>
+        <field name="ubicacion">terraza</field>
+        <field name="capacidad">4</field>
+        <field name="activa">True</field>
+    </record>
+
+    <!-- ===================== -->
+    <!-- PRODUCTOS (cafe.producto) -->
+    <!-- ===================== -->
+    <record id="producto_cafe_con_leche" model="cafe.producto">
+        <field name="name">Café con leche</field>
+        <field name="precio">2.20</field>
+        <field name="tipo">bebida</field>
+        <field name="descripcion">Café espresso con leche.</field>
+        <field name="activo">True</field>
+        <field name="alergeno_ids" eval="[(6, 0, [ref('alergeno_lactosa')])]"/>
+    </record>
+
+    <record id="producto_tostada_jamon" model="cafe.producto">
+        <field name="name">Tostada con jamón</field>
+        <field name="precio">3.50</field>
+        <field name="tipo">comida</field>
+        <field name="descripcion">Pan tostado con jamón.</field>
+        <field name="activo">True</field>
+        <field name="alergeno_ids" eval="[(6, 0, [ref('alergeno_gluten')])]"/>
+    </record>
+
+    <record id="producto_brownie" model="cafe.producto">
+        <field name="name">Brownie</field>
+        <field name="precio">3.00</field>
+        <field name="tipo">postre</field>
+        <field name="descripcion">Brownie de chocolate.</field>
+        <field name="activo">True</field>
+        <field name="alergeno_ids" eval="[(6, 0, [ref('alergeno_gluten'), ref('alergeno_lactosa'), ref('alergeno_frutos_secos')])]"/>
+    </record>
+
+    <!-- ===================== -->
+    <!-- PEDIDOS (cafe.pedido) -->
+    <!-- ===================== -->
+    <record id="pedido_demo_1" model="cafe.pedido">
+        <field name="name">PED-0001</field>
+        <field name="mesa_id" ref="mesa_m1"/>
+        <field name="estado">abierto</field>
+    </record>
+
+    <record id="pedido_demo_2" model="cafe.pedido">
+        <field name="name">PED-0002</field>
+        <field name="mesa_id" ref="mesa_t1"/>
+        <field name="estado">cobrado</field>
+    </record>
+
+    <!-- ===================== -->
+    <!-- LÍNEAS DE PEDIDO (cafe.pedido.linea) -->
+    <!-- ===================== -->
+    <record id="pedido_demo_1_linea_1" model="cafe.pedido.linea">
+        <field name="pedido_id" ref="pedido_demo_1"/>
+        <field name="producto_id" ref="producto_cafe_con_leche"/>
+        <field name="cantidad">2</field>
+    </record>
+
+    <record id="pedido_demo_1_linea_2" model="cafe.pedido.linea">
+        <field name="pedido_id" ref="pedido_demo_1"/>
+        <field name="producto_id" ref="producto_tostada_jamon"/>
+        <field name="cantidad">1</field>
+    </record>
+
+    <record id="pedido_demo_2_linea_1" model="cafe.pedido.linea">
+        <field name="pedido_id" ref="pedido_demo_2"/>
+        <field name="producto_id" ref="producto_brownie"/>
+        <field name="cantidad">1</field>
+    </record>
+
+</odoo>

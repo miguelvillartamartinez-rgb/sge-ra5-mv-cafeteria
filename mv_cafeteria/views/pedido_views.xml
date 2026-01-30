@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- TREE -->
+    <record id="mv_cafeteria_pedido_view_tree" model="ir.ui.view">
+        <field name="name">cafe.pedido.tree</field>
+        <field name="model">cafe.pedido</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="fecha"/>
+                <field name="mesa_id"/>
+                <field name="estado"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- FORM -->
+    <record id="mv_cafeteria_pedido_view_form" model="ir.ui.view">
+        <field name="name">cafe.pedido.form</field>
+        <field name="model">cafe.pedido</field>
+        <field name="arch" type="xml">
+            <form string="Pedido">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="fecha"/>
+                        <field name="mesa_id"/>
+                        <field name="estado"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Líneas">
+                            <field name="linea_ids">
+                                <tree editable="bottom">
+                                    <field name="producto_id"/>
+                                    <field name="cantidad"/>
+                                    <field name="precio_unitario" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+   <record id="mv_cafeteria_pedido_action" model="ir.actions.act_window">
+    <field name="name">Pedidos</field>
+    <field name="res_model">cafe.pedido</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+
+</odoo>
