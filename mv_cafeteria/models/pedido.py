@@ -1,6 +1,8 @@
 from odoo import models, fields, api
 from odoo.exceptions import UserError
 from odoo.exceptions import ValidationError
+from odoo import _
+
 
 class CafePedido(models.Model):
     _name = "cafe.pedido"
@@ -24,7 +26,13 @@ class CafePedido(models.Model):
     def create(self, vals):
         if vals.get("name", "New") == "New":
             vals["name"] = self.env["ir.sequence"].next_by_code("cafe.pedido") or "New"
-        return super().create(vals)
+
+        pedido = super().create(vals)
+
+        pedido.mesa_id._compute_ocupada()
+
+        return pedido
+
 
     @api.depends("linea_ids.subtotal")
     def _compute_total(self):
@@ -46,16 +54,37 @@ class CafePedido(models.Model):
     def write(self, vals):
         only_estado = set(vals.keys()) <= {"estado"}
 
+        # Guardamos mesas antes del cambio
+        mesas_antes = self.mapped("mesa_id")
+
         for pedido in self:
             if pedido.estado != "abierto" and not only_estado:
                 raise UserError("No puedes modificar un pedido que no esté en estado Abierto.")
-        return super().write(vals)
-    
+
+        res = super().write(vals)
+
+        # Mesas después del cambio
+        mesas_despues = self.mapped("mesa_id")
+
+        # Recalcular ocupación de mesas implicadas
+        (mesas_antes | mesas_despues)._compute_ocupada()
+
+        return res
+
     def unlink(self):
+        mesas = self.mapped("mesa_id")
+
         for pedido in self:
             if pedido.estado != "abierto":
                 raise UserError("No puedes borrar un pedido que no esté en estado Abierto.")
-        return super().unlink()
+
+        res = super().unlink()
+
+        # Recalcular ocupación de las mesas afectadas
+        mesas._compute_ocupada()
+
+        return res
+
     
     @api.constrains("mesa_id", "estado")
     def _check_un_pedido_abierto_por_mesa(self):
@@ -70,6 +99,23 @@ class CafePedido(models.Model):
             if otros:
                 raise ValidationError(_("Ya existe un pedido abierto para esta mesa."))
 
-        
+    @api.constrains("mesa_id", "estado")
+    def _check_mesa_libre(self):
+        for pedido in self:
+            if pedido.estado != "abierto" or not pedido.mesa_id:
+                continue
+            otros = self.search_count([
+                ("id", "!=", pedido.id),
+                ("mesa_id", "=", pedido.mesa_id.id),
+                ("estado", "=", "abierto"),
+            ])
+            if otros:
+                raise ValidationError(_("Esa mesa ya tiene un pedido abierto."))
+            
+    def _recalcular_mesas_ocupadas(self, mesas):
+        mesas = mesas.filtered(lambda m: m)  # por si hay None
+        if mesas:
+            mesas._compute_ocupada()
+
 
 
