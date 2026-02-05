@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import UserError
+from odoo.exceptions import ValidationError
 
 class CafePedido(models.Model):
     _name = "cafe.pedido"
@@ -55,6 +56,19 @@ class CafePedido(models.Model):
             if pedido.estado != "abierto":
                 raise UserError("No puedes borrar un pedido que no esté en estado Abierto.")
         return super().unlink()
+    
+    @api.constrains("mesa_id", "estado")
+    def _check_un_pedido_abierto_por_mesa(self):
+        for pedido in self:
+            if pedido.estado != "abierto" or not pedido.mesa_id:
+                continue
+            otros = self.search_count([
+                ("id", "!=", pedido.id),
+                ("mesa_id", "=", pedido.mesa_id.id),
+                ("estado", "=", "abierto"),
+            ])
+            if otros:
+                raise ValidationError(_("Ya existe un pedido abierto para esta mesa."))
 
         
 
