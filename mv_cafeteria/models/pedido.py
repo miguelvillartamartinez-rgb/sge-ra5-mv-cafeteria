@@ -23,3 +23,10 @@ class CafePedido(models.Model):
     def _compute_total(self):
         for pedido in self:
             pedido.total = sum(pedido.linea_ids.mapped("subtotal"))
+            
+    @api.model
+    def create(self, vals):
+        if vals.get("name", "New") == "New":
+            vals["name"] = self.env["ir.sequence"].next_by_code("cafe.pedido") or "New"
+        return super().create(vals)
+

@@ -8,6 +8,7 @@
     "depends": ["base"],
 "data": [
     "security/ir.model.access.csv",
+    "data/sequence.xml",
     "views/producto_views.xml",
     "views/mesa_views.xml",
     "views/alergeno_views.xml",
