@@ -39,7 +39,7 @@
           <group>
             <field name="name"/>
             <field name="fecha"/>
-            <field name="mesa_id"/>
+            <field name="mesa_id" domain="[('activa','=',True), ('ocupada','=',False)]"/>
             <field name="estado"/>
           </group>
 
