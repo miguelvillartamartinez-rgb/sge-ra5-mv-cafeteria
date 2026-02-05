@@ -21,27 +21,19 @@
 
       <form string="Pedido">
 
-        <!-- ============ AÑADIDO BLOQUE B ============ -->
-        <header>
+      <header>
+  <button name="action_cobrar"
+          type="object"
+          string="Cobrar"
+          class="btn-primary"/>
 
-          <button name="action_cobrar"
-                  type="object"
-                  string="Cobrar"
-                  class="btn-primary"
-                  attrs="{'invisible': [('estado','!=','abierto')]}"/>
+  <button name="action_cancelar"
+          type="object"
+          string="Cancelar"
+          class="btn-secondary"/>
 
-          <button name="action_cancelar"
-                  type="object"
-                  string="Cancelar"
-                  class="btn-secondary"
-                  attrs="{'invisible': [('estado','in',['cobrado','cancelado'])]}"/>
-
-          <field name="estado"
-                  widget="statusbar"
-                  statusbar_visible="abierto,cobrado,cancelado"/>
-
-        </header>
-        <!-- =========================================== -->
+  <field name="estado" widget="statusbar" statusbar_visible="abierto,cobrado,cancelado"/>
+</header>
 
         <sheet>
           <group>

@@ -1,12 +1,11 @@
 from odoo import models, fields, api
 from odoo.exceptions import UserError
 
-
 class CafePedido(models.Model):
     _name = "cafe.pedido"
     _description = "Pedido"
 
-    name = fields.Char(string="Referencia", required=True, default="New")
+    name = fields.Char(string="Referencia", required=True, default="New", copy=False, readonly=True)
     fecha = fields.Datetime(string="Fecha", default=fields.Datetime.now, required=True)
     mesa_id = fields.Many2one("cafe.mesa", string="Mesa", required=True)
 
@@ -18,19 +17,18 @@ class CafePedido(models.Model):
     )
 
     linea_ids = fields.One2many("cafe.pedido.linea", "pedido_id", string="Líneas")
-
     total = fields.Float(string="Total", compute="_compute_total", store=True)
-
-    @api.depends("linea_ids.subtotal")
-    def _compute_total(self):
-        for pedido in self:
-            pedido.total = sum(pedido.linea_ids.mapped("subtotal"))
 
     @api.model
     def create(self, vals):
         if vals.get("name", "New") == "New":
             vals["name"] = self.env["ir.sequence"].next_by_code("cafe.pedido") or "New"
         return super().create(vals)
+
+    @api.depends("linea_ids.subtotal")
+    def _compute_total(self):
+        for pedido in self:
+            pedido.total = sum(pedido.linea_ids.mapped("subtotal"))
 
     def action_cobrar(self):
         for pedido in self:
@@ -43,4 +41,5 @@ class CafePedido(models.Model):
             if pedido.estado == "cobrado":
                 raise UserError("No puedes cancelar un pedido ya cobrado.")
             pedido.estado = "cancelado"
+
 
