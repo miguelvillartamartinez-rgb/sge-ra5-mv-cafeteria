@@ -42,4 +42,20 @@ class CafePedido(models.Model):
                 raise UserError("No puedes cancelar un pedido ya cobrado.")
             pedido.estado = "cancelado"
 
+    def write(self, vals):
+        only_estado = set(vals.keys()) <= {"estado"}
+
+        for pedido in self:
+            if pedido.estado != "abierto" and not only_estado:
+                raise UserError("No puedes modificar un pedido que no esté en estado Abierto.")
+        return super().write(vals)
+    
+    def unlink(self):
+        for pedido in self:
+            if pedido.estado != "abierto":
+                raise UserError("No puedes borrar un pedido que no esté en estado Abierto.")
+        return super().unlink()
+
+        
+
 
