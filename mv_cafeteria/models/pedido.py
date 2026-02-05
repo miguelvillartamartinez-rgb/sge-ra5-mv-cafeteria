@@ -1,4 +1,6 @@
 from odoo import models, fields, api
+from odoo.exceptions import UserError
+
 
 class CafePedido(models.Model):
     _name = "cafe.pedido"
@@ -23,10 +25,22 @@ class CafePedido(models.Model):
     def _compute_total(self):
         for pedido in self:
             pedido.total = sum(pedido.linea_ids.mapped("subtotal"))
-            
+
     @api.model
     def create(self, vals):
         if vals.get("name", "New") == "New":
             vals["name"] = self.env["ir.sequence"].next_by_code("cafe.pedido") or "New"
         return super().create(vals)
+
+    def action_cobrar(self):
+        for pedido in self:
+            if pedido.estado != "abierto":
+                raise UserError("Solo puedes cobrar pedidos en estado Abierto.")
+            pedido.estado = "cobrado"
+
+    def action_cancelar(self):
+        for pedido in self:
+            if pedido.estado == "cobrado":
+                raise UserError("No puedes cancelar un pedido ya cobrado.")
+            pedido.estado = "cancelado"
 

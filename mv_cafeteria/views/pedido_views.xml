@@ -18,7 +18,31 @@
     <field name="name">cafe.pedido.form</field>
     <field name="model">cafe.pedido</field>
     <field name="arch" type="xml">
+
       <form string="Pedido">
+
+        <!-- ============ AÑADIDO BLOQUE B ============ -->
+        <header>
+
+          <button name="action_cobrar"
+                  type="object"
+                  string="Cobrar"
+                  class="btn-primary"
+                  attrs="{'invisible': [('estado','!=','abierto')]}"/>
+
+          <button name="action_cancelar"
+                  type="object"
+                  string="Cancelar"
+                  class="btn-secondary"
+                  attrs="{'invisible': [('estado','in',['cobrado','cancelado'])]}"/>
+
+          <field name="estado"
+                  widget="statusbar"
+                  statusbar_visible="abierto,cobrado,cancelado"/>
+
+        </header>
+        <!-- =========================================== -->
+
         <sheet>
           <group>
             <field name="name"/>
@@ -46,6 +70,7 @@
 
         </sheet>
       </form>
+
     </field>
   </record>
 
