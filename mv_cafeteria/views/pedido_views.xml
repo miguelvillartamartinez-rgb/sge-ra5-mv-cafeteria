@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+  <!-- TREE -->
   <record id="mv_cafeteria_pedido_view_tree" model="ir.ui.view">
     <field name="name">cafe.pedido.tree</field>
     <field name="model">cafe.pedido</field>
@@ -14,6 +15,7 @@
     </field>
   </record>
 
+  <!-- FORM -->
   <record id="mv_cafeteria_pedido_view_form" model="ir.ui.view">
     <field name="name">cafe.pedido.form</field>
     <field name="model">cafe.pedido</field>
@@ -21,31 +23,41 @@
 
       <form string="Pedido">
 
-      <header>
-  <button name="action_cobrar"
-          type="object"
-          string="Cobrar"
-          class="btn-primary"/>
+        <header>
+          <button name="action_cobrar"
+                  type="object"
+                  string="Cobrar"
+                  class="btn-primary"/>
 
-  <button name="action_cancelar"
-          type="object"
-          string="Cancelar"
-          class="btn-secondary"/>
+          <button name="action_cancelar"
+                  type="object"
+                  string="Cancelar"
+                  class="btn-secondary"/>
 
-  <field name="estado" widget="statusbar" statusbar_visible="abierto,cobrado,cancelado"/>
-</header>
+          <field name="estado"
+                 widget="statusbar"
+                 statusbar_visible="abierto,cobrado,cancelado"/>
+        </header>
 
         <sheet>
+
+          <!-- Datos generales -->
           <group>
-            <field name="name"/>
-            <field name="fecha"/>
-            <field name="mesa_id" domain="[('activa','=',True), ('ocupada','=',False)]"/>
-            <field name="estado"/>
+            <group>
+              <field name="name" readonly="1"/>
+              <field name="fecha"/>
+            </group>
+
+            <group>
+              <field name="mesa_id" domain="[('activa','=',True), ('ocupada','=',False)]"/>
+              <field name="estado" readonly="1"/>
+            </group>
           </group>
 
+          <!-- Líneas -->
           <notebook>
-            <page string="Líneas">
-              <field name="linea_ids">
+            <page string="Líneas del pedido">
+              <field name="linea_ids" context="{'default_pedido_id': active_id}">
                 <tree editable="bottom">
                   <field name="producto_id"/>
                   <field name="cantidad"/>
@@ -56,8 +68,15 @@
             </page>
           </notebook>
 
+          <!-- Total -->
           <group>
-            <field name="total" readonly="1"/>
+            <group/>
+            <group>
+              <label for="total"/>
+              <div style="font-size:22px; font-weight:bold;">
+                <field name="total" readonly="1"/>
+              </div>
+            </group>
           </group>
 
         </sheet>
@@ -66,6 +85,7 @@
     </field>
   </record>
 
+  <!-- ACTION -->
   <record id="mv_cafeteria_pedido_action" model="ir.actions.act_window">
     <field name="name">Pedidos</field>
     <field name="res_model">cafe.pedido</field>
