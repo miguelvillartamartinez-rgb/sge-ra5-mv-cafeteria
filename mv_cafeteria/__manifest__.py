@@ -9,12 +9,15 @@
 "data": [
     "security/ir.model.access.csv",
     "data/sequence.xml",
+    "data/demo.xml",
+    "views/search_views.xml",
     "views/producto_views.xml",
     "views/mesa_views.xml",
     "views/alergeno_views.xml",
     "views/pedido_views.xml",
     "views/menu.xml",
 ],
+
 "demo": [
     "data/demo.xml",
 ],

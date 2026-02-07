@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- ================= SEARCH: PEDIDOS ================= -->
+  <record id="mv_cafeteria_pedido_view_search" model="ir.ui.view">
+    <field name="name">cafe.pedido.search</field>
+    <field name="model">cafe.pedido</field>
+    <field name="arch" type="xml">
+      <search string="Buscar pedidos">
+
+        <field name="name" string="Referencia"/>
+        <field name="mesa_id"/>
+        <field name="estado"/>
+
+        <separator/>
+
+        <!-- Filtros rápidos -->
+        <filter string="Abiertos" name="abiertos" domain="[('estado','=','abierto')]"/>
+        <filter string="Cobrados" name="cobrados" domain="[('estado','=','cobrado')]"/>
+        <filter string="Cancelados" name="cancelados" domain="[('estado','=','cancelado')]"/>
+
+        <separator/>
+
+        <!-- Agrupaciones -->
+        <group expand="0" string="Agrupar por">
+          <filter string="Mesa" name="group_mesa" context="{'group_by':'mesa_id'}"/>
+          <filter string="Estado" name="group_estado" context="{'group_by':'estado'}"/>
+          <filter string="Fecha" name="group_fecha" context="{'group_by':'fecha'}"/>
+        </group>
+
+      </search>
+    </field>
+  </record>
+
+
+  <!-- ================= SEARCH: PRODUCTOS ================= -->
+  <record id="mv_cafeteria_producto_view_search" model="ir.ui.view">
+    <field name="name">cafe.producto.search</field>
+    <field name="model">cafe.producto</field>
+    <field name="arch" type="xml">
+      <search string="Buscar productos">
+
+        <field name="name"/>
+        <field name="tipo"/>
+        <field name="alergeno_ids"/>
+
+        <separator/>
+
+        <filter string="Activos" name="activos" domain="[('activo','=',True)]"/>
+        <filter string="Inactivos" name="inactivos" domain="[('activo','=',False)]"/>
+
+        <separator/>
+
+        <filter string="Bebidas" name="bebidas" domain="[('tipo','=','bebida')]"/>
+        <filter string="Comida" name="comida" domain="[('tipo','=','comida')]"/>
+        <filter string="Postres" name="postres" domain="[('tipo','=','postre')]"/>
+
+        <separator/>
+
+        <group expand="0" string="Agrupar por">
+          <filter string="Tipo" name="group_tipo" context="{'group_by':'tipo'}"/>
+          <filter string="Alérgeno" name="group_alergeno" context="{'group_by':'alergeno_ids'}"/>
+        </group>
+
+      </search>
+    </field>
+  </record>
+
+
+  <!-- ================= SEARCH: MESAS ================= -->
+  <record id="mv_cafeteria_mesa_view_search" model="ir.ui.view">
+    <field name="name">cafe.mesa.search</field>
+    <field name="model">cafe.mesa</field>
+    <field name="arch" type="xml">
+      <search string="Buscar mesas">
+
+        <field name="name"/>
+        <field name="ubicacion"/>
+        <field name="activa"/>
+
+        <separator/>
+
+        <filter string="Activas" name="mesas_activas" domain="[('activa','=',True)]"/>
+        <filter string="Inactivas" name="mesas_inactivas" domain="[('activa','=',False)]"/>
+
+        <!-- Si tu mesa.py tiene 'ocupada' -->
+        <filter string="Libres" name="mesas_libres" domain="[('ocupada','=',False)]"/>
+        <filter string="Ocupadas" name="mesas_ocupadas" domain="[('ocupada','=',True)]"/>
+
+        <separator/>
+
+        <group expand="0" string="Agrupar por">
+          <filter string="Ubicación" name="group_ubicacion" context="{'group_by':'ubicacion'}"/>
+          <filter string="Activa" name="group_activa" context="{'group_by':'activa'}"/>
+        </group>
+
+      </search>
+    </field>
+  </record>
+
+</odoo>
