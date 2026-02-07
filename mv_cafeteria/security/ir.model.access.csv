@@ -7,6 +7,7 @@ access_cafe_alergeno_user,cafe.alergeno user,model_cafe_alergeno,base.group_user
 access_cafe_alergeno_admin,cafe.alergeno admin,model_cafe_alergeno,base.group_system,1,1,1,1
 access_cafe_pedido_user,cafe.pedido user,model_cafe_pedido,base.group_user,1,1,1,0
 access_cafe_pedido_admin,cafe.pedido admin,model_cafe_pedido,base.group_system,1,1,1,1
-access_cafe_pedido_linea_user,cafe.pedido.linea user,model_cafe_pedido_linea,base.group_user,1,1,1,0
+access_cafe_pedido_linea_user,cafe.pedido.linea user,model_cafe_pedido_linea,base.group_user,1,1,1,1
 access_cafe_pedido_linea_admin,cafe.pedido.linea admin,model_cafe_pedido_linea,base.group_system,1,1,1,1
+
 
